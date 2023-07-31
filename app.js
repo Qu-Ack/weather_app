@@ -17,7 +17,9 @@ async function apiCall(url) {
     try {
         const response = await fetch(url , {mode:'cors'});
         const data = await response.json();
+        console.log(data)
         let main_data = extractData(data)
+        console.log(main_data);
         domchange(main_data)
     } catch(error) {
         console.log(`There is an error ${error}`);
@@ -48,6 +50,8 @@ function extractData(jsonData) {
         city_temp_c: jsonData.current.temp_c,
         city_temp_f: jsonData.current.temp_f,
         city_humidity: jsonData.current.humidity,
+        condition:jsonData.current.condition.text,
+        icon:jsonData.current.condition.icon,
     }
 
     return weather
@@ -58,7 +62,8 @@ async function forecastAPICall(url) {
         const response = await fetch(url , {mode:'cors'})
         const data = await response.json();
         console.log(data)
-        console.log(extractForecastData(data))
+        let forecastdata = extractForecastData(data)
+        console.log(forecastdata)
 
     } catch(error) {
         console.log(error)
@@ -74,12 +79,14 @@ function extractForecastData(jsonData) {
             , max_temp_c: jsonData.forecast.forecastday[i].day.maxtemp_c,
             min_temp_c: jsonData.forecast.forecastday[i].day.mintemp_c,
         hour: [],avghumidity: jsonData.forecast.forecastday[i].day.avghumidity 
-        , chance_of_rain: jsonData.forecast.forecastday[i].day.daily_chance_of_rain , chance_of_snow: jsonData.forecast.forecastday[i].day.daily_chance_of_snow,}
+        , chance_of_rain: jsonData.forecast.forecastday[i].day.daily_chance_of_rain , chance_of_snow: jsonData.forecast.forecastday[i].day.daily_chance_of_snow,
+        condition: jsonData.forecast.forecastday[i].day.condition.text , icon:jsonData.forecast.forecastday[i].day.condition.icon,}
 
         for (let j = 0 ; j < 24 ; j++) {
             forecast[i].hour[j] = {time: jsonData.forecast.forecastday[i].hour[j].time,
             hour_temp_c: jsonData.forecast.forecastday[i].hour[j].temp_c , 
-            hour_humidity: jsonData.forecast.forecastday[i].hour[j].humidity}
+            hour_humidity: jsonData.forecast.forecastday[i].hour[j].humidity , condition: jsonData.forecast.forecastday[i].hour[j].condition.text , 
+            icon: jsonData.forecast.forecastday[i].hour[j].condition.icon,}
         }
     }
 

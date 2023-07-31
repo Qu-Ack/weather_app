@@ -1,0 +1,57 @@
+body {
+    margin:0; 
+    padding:0;
+    background-color:black;
+    font-family: 'Jost', sans-serif;
+    color:white;
+}
+
+header {
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    padding:32px;
+}
+
+header input {
+    padding:15px;
+    border-radius:15px;
+    background:transparent;
+    width:500px;
+    outline:none;
+    color:white;
+    transition:all 0.25s ease;
+    border:3px solid white;
+}
+
+header button {
+    padding:12px;
+    border-radius: 15px;
+    margin-left: 12px;
+    font-weight: bold;
+    transition :all 0.25s ease;
+    color:white;
+    background:transparent;
+    border:2px solid white;
+}
+
+header button:hover {
+    cursor:pointer;
+    background: gray;
+}
+
+header input::placeholder {
+    color:rgb(187, 185, 185);
+}
+
+header input:focus::placeholder {
+    color:transparent;
+}
+
+header input:focus {
+    outline:none;
+}
+
+header svg {
+    width:5rem;
+}
