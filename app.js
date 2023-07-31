@@ -58,6 +58,7 @@ async function forecastAPICall(url) {
         const response = await fetch(url , {mode:'cors'})
         const data = await response.json();
         console.log(data)
+        console.log(extractForecastData(data))
 
     } catch(error) {
         console.log(error)
@@ -66,8 +67,22 @@ async function forecastAPICall(url) {
 
 
 function extractForecastData(jsonData) {
-    var forecast = {
+    forecast = {}
+    for(let i = 0 ; i < 7 ; i++) {
+        
+        forecast[i] = {date: jsonData.forecast.forecastday[i].date 
+            , max_temp_c: jsonData.forecast.forecastday[i].day.maxtemp_c,
+            min_temp_c: jsonData.forecast.forecastday[i].day.mintemp_c,
+        hour: [],avghumidity: jsonData.forecast.forecastday[i].day.avghumidity 
+        , chance_of_rain: jsonData.forecast.forecastday[i].day.daily_chance_of_rain , chance_of_snow: jsonData.forecast.forecastday[i].day.daily_chance_of_snow,}
 
+        for (let j = 0 ; j < 24 ; j++) {
+            forecast[i].hour[j] = {time: jsonData.forecast.forecastday[i].hour[j].time,
+            hour_temp_c: jsonData.forecast.forecastday[i].hour[j].temp_c , 
+            hour_humidity: jsonData.forecast.forecastday[i].hour[j].humidity}
+        }
     }
+
+    return forecast
 }
 formdata()
