@@ -1,18 +1,21 @@
 
 
 class DOM {
- test = document.querySelector('.test')
- country = document.querySelector('.countryname')
- cityname = document.querySelector('.cityname')
- temperature = document.querySelector('.temperature')
- humidity = document.querySelector('.humidity')
  city = "Los Angeles"
  input = document.querySelector("#city")
  submitbtn = document.querySelector('button')
+ city_name = document.querySelector('.city-name');
+ temperature = document.querySelector('.temp');
+ condition = document.querySelector('.condition');
+ humidity = document.querySelector('.humidity');
+ times = document.querySelectorAll('.time');
+ icons = document.querySelectorAll('.condition-icon')
+ timetemps = document.querySelectorAll('.time-temp');
+ mainimage = document.querySelector('.main-image')
 }
 
 let dom = new DOM();
-
+console.log(dom.mainimage)
 async function apiCall(url) {
     try {
         const response = await fetch(url , {mode:'cors'});
@@ -27,10 +30,11 @@ async function apiCall(url) {
 }
 
 function domchange(obj) {
-    dom.country.textContent = obj.country_name
-    dom.cityname.textContent = obj.city_name
-    dom.temperature.textContent = `${obj.city_temp_c}°C`
-    dom.humidity.textContent = `${obj.city_humidity}%`
+    dom.city_name.textContent = obj.city_name;
+    dom.condition.textContent = obj.condition;
+    dom.temperature.textContent = `${obj.city_temp_c}°C`;
+    dom.humidity.textContent = `${obj.city_humidity}% humidity`;
+    dom.mainimage.src = obj.icon;
 }
 
 function formdata() {
@@ -52,6 +56,7 @@ function extractData(jsonData) {
         city_humidity: jsonData.current.humidity,
         condition:jsonData.current.condition.text,
         icon:jsonData.current.condition.icon,
+        uv:jsonData.current.uv,
     }
 
     return weather
@@ -61,15 +66,23 @@ async function forecastAPICall(url) {
     try {
         const response = await fetch(url , {mode:'cors'})
         const data = await response.json();
-        console.log(data)
         let forecastdata = extractForecastData(data)
         console.log(forecastdata)
+        domchangeforecast(forecastdata)
 
     } catch(error) {
         console.log(error)
     }
 }
 
+
+function domchangeforecast(obj) {
+    for(let i = 0 ; i < dom.times.length; i++) {
+        dom.times[i].textContent = obj["0"].hour[i].time;
+        dom.icons[i].src = obj["0"].hour[i].icon
+        dom.timetemps[i].textContent = `${obj["0"].hour[i].hour_temp_c}°C`
+    }
+}
 
 function extractForecastData(jsonData) {
     forecast = {}
